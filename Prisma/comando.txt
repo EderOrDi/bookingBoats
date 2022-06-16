@@ -1,0 +1,268 @@
+// *** consultas ***
+-------User
+query{
+  user {
+    idUser
+    name
+    email
+  }
+}
+
+----- Credit
+query{
+  credit {
+    idCredit
+    userId
+    Credit
+  }
+}
+
+------ School
+query{
+  school {
+    idSchool
+    nameSchool
+    description
+  }
+}
+
+---- Boats
+query{
+  boat {
+    idBoat
+    name
+    available
+    price
+    schoolId
+  }
+}
+
+----- bookings
+query{
+	 booking {
+	   idBooking
+	   from
+	   to
+	   userId
+	   boatId
+	 }
+}
+
+************ creacion de usuario**********
+mutation {
+  createUser(input: {name: "Juan Perez", email: "juanperez@gmail"}) {
+    idUser
+    name
+    email
+  }
+}
+
+
+*********  carga de credito *******
+mutation {
+  createCredit (input:{
+    userId: 5,
+    Credit: 5000
+    
+  }) {
+    idCredit
+    userId
+    Credit
+  }
+}
+
+
+********* Creacion de School **********   Ver id de la escuela creada para la creacion de boat
+mutation{
+  createSchool(input:{
+    nameSchool: "SchoolBoat´s",
+    description: "Variados Botes"
+  }) {
+    idSchool
+    nameSchool
+    description
+  }
+}
+
+******** creacion de botes ********
+
+mutation {
+  createBoat(input: {name: "Naufrago", available: true, price: 2000, schoolId: 6}) {
+    idBoat
+    name
+    available
+    price
+    schoolId
+  }
+}
+
+
+********* Creacion de Bookings *******
+
+de 11 a 12
+mutation {
+  createBooking(input: {from: 1654340400000, to: 1654344000000, userId: 1, boatId: 1}) {
+    userId
+    boatId
+    idBooking
+    from
+    to
+  }
+}
+
+
+
+
+
+de 15 a 16
+mutation {
+  createBooking(input: {from: 1654354800000, to: 1654358400000, userId: 1, boatId: 1}) {
+    userId
+    boatId
+    idBooking
+    from
+    to
+  }
+}
+
+// no se puede realizar reserva sin credito para el pago del alquiler del bote
+
+// *** carga sin exito, por solapamiento 
+de 20:30 a 21:00
+mutation {
+  createBooking(input: {from: 1654374600000, to: 1654378200000, userId: 1, boatId: 1}) {
+    userId
+    boatId
+    idBooking
+    from
+    to
+  }
+}
+
+
+//  carga sin exito, por solapamiento
+de 14 horas a 17
+mutation {
+  createBooking(input: {from: 1654351200000, to: 1654362000000, userId: 1, boatId: 1}) {
+    userId
+    boatId
+    idBooking
+    from
+    to
+  }
+}
+
+//  carga sin exito, por solapamiento
+**** de 09:00 a 11:00  ****
+mutation {
+  createBooking(input: {from: 1654333200000, to: 1654340400000, userId: 1, boatId: 1}) {
+    userId
+    boatId
+    idBooking
+    from
+    to
+  }
+}
+
+// carga sin exito, por validacion de date
+***** de 09:00 a 09:00 ****
+mutation {
+  createBooking(input: {from: 1654333200000, to: 1654333200000, userId: 1, boatId: 1}) {
+    userId
+    boatId
+    idBooking
+    from
+    to
+  }
+}
+
+mutation {
+  createUser(input: {
+    name:"Prueba",
+    email:"email@algo.com.2"
+  }) {
+    idUser
+    name
+    lastName
+    email
+  }
+}
+
+
+mutation {
+
+  
+  createSchool (input:{
+    nameSchool: "La Escuela",
+    description: "24/7"
+  }){
+    idSchool
+    nameSchool
+    description
+  }
+  
+  createBoat (input : {
+    name: "HolandesErrante",
+    price: 2000,
+    schoolId: 1,
+    available: true,
+    
+  }){
+    name
+    price
+  	schoolId
+  }
+}
+
+// saldo insuficiente
+mutation {
+  createBooking (input:{
+    userId: 1,
+    boatId: 1,
+    from:1654336800000,
+    to: 1654347600000
+    
+  })
+  {
+    idBooking
+    userId
+    boatId
+    from
+    to
+    
+  }
+}
+
+*******formato aceptado por graphqql  ******
+mutation {
+  createBooking (input:{
+    userId: ,
+    boatId: 2,
+    from:"2022-06-04T14:00",
+    to: "2022-06-04T17:00"
+    
+  })
+  {
+    idBooking
+    userId
+    boatId
+    from
+    to
+    
+  }
+}
+
+
+
+/// Comando prisma para migracion de datos desde el schema.prisma
+
+npx prisma migrate dev --name appDb 
+
+***********>>>  Luego comando para generacion de prismaClient
+
+npx prisma generate
+
+****por si no funcione 
+primero:     npm install @prisma/client
+
+

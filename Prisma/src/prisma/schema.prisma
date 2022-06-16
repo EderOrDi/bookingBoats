@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  idUser   Int        @id @default(autoincrement())
+  name     String     @db.VarChar(255)
+  email    String     @unique @db.VarChar(255)
+  credits  Credits[]
+  Bookings Bookings[]
+}
+
+model Credits {
+  idCredit Int  @id @default(autoincrement())
+  userId   Int
+  user     User @relation(fields: [userId], references: [idUser])
+  Credit   Int
+}
+
+model Schools {
+  idSchool    Int     @id @default(autoincrement())
+  nameSchool  String  @db.VarChar(255)
+  description String  @db.VarChar(255)
+  boats       Boats[]
+}
+
+model Boats {
+  idBoat    Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  available Boolean    @default(true)
+  price     Int
+  schoolId  Int
+  school    Schools    @relation(fields: [schoolId], references: [idSchool])
+  booking   Bookings[]
+}
+
+model Bookings {
+  idBooking Int      @id @default(autoincrement())
+  from      DateTime
+  to        DateTime
+  boatId    Int
+  userId    Int
+  boat      Boats    @relation(fields: [boatId], references: [idBoat])
+  user      User     @relation(fields: [userId], references: [idUser])
+
+}
